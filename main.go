@@ -10,8 +10,10 @@ func eval(text string) int {
 	lexer := newLexer(text)
 	parser := newParser(lexer)
 	interpreter := Interpreter{parser}
-	result := interpreter.interpret()
-	return result.(int)
+	interpreter.interpret()
+	//return result.(int)
+	fmt.Println(GLOBAL_SCOPE)
+	return 0
 }
 
 func unitTest() {
@@ -35,7 +37,8 @@ func unitTest() {
 
 func main() {
 	if len(os.Args) > 1 {
-		unitTest()
+		//unitTest()
+		eval("{ a = 5 + 5 - 6; }\r\n")
 		return
 	}
 	for {

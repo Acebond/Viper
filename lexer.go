@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"strconv"
+	"unicode"
 )
 
 type Lexer struct {
@@ -48,6 +49,18 @@ func (i *Lexer) skipWhiteSpace() {
 	}
 }
 
+func (i *Lexer) _id() Token {
+	// Handle identifiers and reserved keywords
+	idEndIndex := 0
+	for i.currentChar != "" && unicode.IsLetter(rune(i.currentChar[idEndIndex])) {
+		idEndIndex++
+	}
+
+	token := Token{Type: ID, Value: i.currentChar[0:idEndIndex]}
+	i.advance(idEndIndex)
+	return token
+}
+
 func (i *Lexer) getNextToken() Token {
 	/*
 		Lexical analyzer (also known as scanner or tokenizer)
@@ -62,6 +75,10 @@ func (i *Lexer) getNextToken() Token {
 		if isWhiteSpace(i.currentChar[0]) {
 			i.skipWhiteSpace()
 			continue
+		}
+
+		if unicode.IsLetter(rune(i.currentChar[0])) { //why is the string not already runes?
+			return i._id()
 		}
 
 		if IsDigit(i.currentChar[0]) {
@@ -89,6 +106,18 @@ func (i *Lexer) getNextToken() Token {
 		case ')':
 			i.advance(1)
 			return Token{RPAREN, RPAREN}
+		case '=':
+			i.advance(1)
+			return Token{ASSIGN, ASSIGN}
+		case '{':
+			i.advance(1)
+			return Token{LBRACE, LBRACE}
+		case '}':
+			i.advance(1)
+			return Token{RBRACE, RBRACE}
+		case ';':
+			i.advance(1)
+			return Token{SEMI, SEMI}
 		}
 
 		log.Panicf("Unknwon Token: %s", i.currentChar)

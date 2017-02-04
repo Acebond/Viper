@@ -18,12 +18,19 @@ const (
 	DIV     = iota
 	LPAREN  = iota
 	RPAREN  = iota
+	ID      = iota
+	ASSIGN  = iota
+	LBRACE  = iota
+	RBRACE  = iota
+	SEMI    = iota
 	EOF     = iota
 )
 
+// add lookup to function so LBRACE stores '{' and has a func pointer?
+
 type Token struct {
 	Type  int
-	Value int
+	Value interface{}
 }
 
 func (t *Token) String() string {

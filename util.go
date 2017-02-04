@@ -19,5 +19,5 @@ func IsDigit(char byte) bool {
 }
 
 func isWhiteSpace(ch byte) bool {
-	return ch == ' ' || ch == '\t' || ch == '\n'
+	return ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r'
 }
