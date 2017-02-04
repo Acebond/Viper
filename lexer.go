@@ -42,6 +42,12 @@ func (i *Lexer) integer() int {
 	return int(val)
 }
 
+func (i *Lexer) skipWhiteSpace() {
+	for i.currentChar != "" && isWhiteSpace(i.currentChar[0]) {
+		i.advance(1)
+	}
+}
+
 func (i *Lexer) getNextToken() Token {
 	/*
 		Lexical analyzer (also known as scanner or tokenizer)
@@ -53,9 +59,10 @@ func (i *Lexer) getNextToken() Token {
 
 	for i.currentChar != "" { // while we still have something to read form text
 
-		//if i.position >= len(i.text) {
-		//	return Token{EOF, 0}
-		//}
+		if isWhiteSpace(i.currentChar[0]) {
+			i.skipWhiteSpace()
+			continue
+		}
 
 		if IsDigit(i.currentChar[0]) {
 			return Token{INTEGER, i.integer()}
@@ -63,10 +70,6 @@ func (i *Lexer) getNextToken() Token {
 
 		//currentChar := i.text[i.position]
 
-		//if val, err := strconv.ParseInt(string(currentChar), 10, 0); err == nil {
-		//	i.position++
-		//	return Token{INTEGER, int(val)}
-		//}
 		switch i.currentChar[0] {
 		case '*':
 			i.advance(1)

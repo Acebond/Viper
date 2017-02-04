@@ -7,7 +7,7 @@ import (
 )
 
 func eval(text string) int {
-	lexer := newLexer(SpaceMap(text))
+	lexer := newLexer(text)
 	parser := newParser(lexer)
 	interpreter := Interpreter{parser}
 	result := interpreter.interpret()
@@ -22,6 +22,7 @@ func unitTest() {
 		{"5+5", 10},
 		{"5-5", 0},
 		{"7 + 3 * (10 / (12 / (3 + 1) - 1)) / (2 + 3) - 5 - 3 + (8)", 10},
+		{"-5", -5},
 	}
 
 	for _, test := range tests {
