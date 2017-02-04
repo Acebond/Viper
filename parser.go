@@ -26,14 +26,14 @@ func (p *Parser) factor() Node {
 	case PLUS:
 		p.eat(PLUS)
 		node := UnaryOp{operator: token, expr: p.factor()}
-		return node
+		return &node
 	case MINUS:
 		p.eat(MINUS)
 		node := UnaryOp{operator: token, expr: p.factor()}
-		return node
+		return &node
 	case INTEGER:
 		p.eat(INTEGER)
-		return Num{token: token, value: token.Value}
+		return &Num{token: token, value: token.Value}
 	case LPAREN:
 		p.eat(LPAREN)
 		node := p.expr()
@@ -55,7 +55,7 @@ func (p *Parser) term() Node {
 		} else if token.Type == DIV {
 			p.eat(DIV)
 		}
-		node = BinOp{left: node, operator: token, right: p.factor()}
+		node = &BinOp{left: node, operator: token, right: p.factor()}
 	}
 	return node
 }
@@ -72,11 +72,11 @@ func (p *Parser) expr() Node {
 		} else if token.Type == MINUS {
 			p.eat(MINUS)
 		}
-		node = BinOp{left: node, operator: token, right: p.term()}
+		node = &BinOp{left: node, operator: token, right: p.term()}
 	}
 	return node
 }
 
-func (p *Parser) parse() interface{} {
+func (p *Parser) parse() Node {
 	return p.expr()
 }
