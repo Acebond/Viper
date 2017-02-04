@@ -20,20 +20,29 @@ func (p *Parser) eat(tokenType int) {
 }
 
 func (p *Parser) factor() Node {
-	// factor : INTEGER | LPAREN expr RPAREN
+	// factor : (PLUS | MINUS) factor | INTEGER | LPAREN expr RPAREN
 	token := p.currentToken
-	if token.Type == INTEGER {
+	switch token.Type {
+	case PLUS:
+		p.eat(PLUS)
+		node := UnaryOp{operator: token, expr: p.factor()}
+		return node
+	case MINUS:
+		p.eat(MINUS)
+		node := UnaryOp{operator: token, expr: p.factor()}
+		return node
+	case INTEGER:
 		p.eat(INTEGER)
 		return Num{token: token, value: token.Value}
-	} else if token.Type == LPAREN {
+	case LPAREN:
 		p.eat(LPAREN)
 		node := p.expr()
 		p.eat(RPAREN)
 		return node
-	} else {
+	default:
 		log.Panicf("Unknown Token for facotr %s\n", token)
-		return 0
 	}
+	return nil
 }
 
 func (p *Parser) term() Node {

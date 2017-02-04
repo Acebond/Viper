@@ -14,8 +14,10 @@ func (i *Interpreter) visit(node Node) interface{} {
 		return i.visitBinOp(v)
 	case Num:
 		return i.visitNum(v)
+	case UnaryOp:
+		return i.visitUnaryOp(v)
 	default:
-		log.Panicf("Visit error]n")
+		log.Panicf("Visit errorn")
 		return nil
 	}
 }
@@ -40,6 +42,18 @@ func (i *Interpreter) visitBinOp(binOp BinOp) interface{} {
 
 func (i *Interpreter) visitNum(num Num) int {
 	return num.value
+}
+
+func (i *Interpreter) visitUnaryOp(unaryOp UnaryOp) int {
+	op := unaryOp.operator.Type
+	if op == PLUS {
+		return +(i.visit(unaryOp.expr).(int))
+	} else if op == MINUS {
+		return -(i.visit(unaryOp.expr).(int))
+	} else {
+		log.Panicf("Invalid Unary Type")
+	}
+	return 0
 }
 
 func (i *Interpreter) interpret() interface{} {

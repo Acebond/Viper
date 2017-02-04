@@ -15,3 +15,8 @@ type Num struct {
 	token Token
 	value int
 }
+
+type UnaryOp struct {
+	operator Token
+	expr     Node
+}
