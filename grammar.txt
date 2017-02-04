@@ -1,0 +1,25 @@
+    program : compound_statement
+
+    compound_statement : LBRACE statement_list RBRACE
+
+    statement_list : (statement SEMI)*
+
+    statement : compound_statement
+              | assignment_statement
+              | empty
+
+    assignment_statement : variable ASSIGN expr
+
+    empty :
+
+    expr: term ((PLUS | MINUS) term)*
+
+    term: factor ((MUL | DIV) factor)*
+
+    factor : PLUS factor
+           | MINUS factor
+           | INTEGER
+           | LPAREN expr RPAREN
+           | variable
+
+    variable: ID
